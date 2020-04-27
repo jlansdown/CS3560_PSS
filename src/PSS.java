@@ -1,6 +1,13 @@
-public interface PSS {
+
+
+
+
+
+
+public interface PSS 
+{
     void viewSchedule();
     void printSchedule();
-    void storeToFile();
-    void readFromFile();
+    void storeToFile(String fileName);
+    void readFromFile(String FileName);
 }

@@ -1,7 +1,18 @@
-public interface Task {
+
+
+
+
+
+public interface Task 
+{
+    
     String name = "";
-    //StartTime
-    int duration = 0;
-    String category = "";
-    String taskType = "";
+    String type = "";
+    int startDate = 0;
+    int startTime = 0;
+    double duration = 0.0;
+    int endDate = 0;
+    int frequency = 0;
+    
+    
 }

@@ -1,5 +1,12 @@
-public interface Schedule {
-    Task getTask();
+
+
+
+
+
+
+public interface Schedule 
+{
+    PSSTask getTask();
     void formatTask();
     void printSchedule();
 }
