@@ -19,8 +19,8 @@ import java.util.Scanner;
 
 public class PSSMain 
 {
-    public static PSSUser pss_user;
-    public static PSSController pss;
+    public static User user;
+    public static PSS pss;
     
     public static String[] list_format
             = {
@@ -38,7 +38,7 @@ public class PSSMain
     {
         //PLEASE USE YOUR OWN DIRECTORY TO TEST THE JSON FILE! EVERYONE IS DIFFERENT!!! 
 
-        pss = new PSSController("Set1.json");
+        pss = new PSS("C:\\Users\\James\\Desktop\\CS3560_PSS\\src\\JSON\\Set1.json");
         
         //pss.printSchedule();
         
@@ -56,7 +56,7 @@ public class PSSMain
         
         System.out.print("Name: _> ");
         name = userInput.nextLine();
-        pss_user = new PSSUser(name);
+        user = new User(name);
         
         System.out.println("\nHello "+name+"! "+"Thank you for choosing PSS!"+"\n");
         
@@ -118,7 +118,7 @@ public class PSSMain
             System.out.println();
         }
         
-        pss.getPSSModel().createTask(list_format, input);
+        pss.getModel().createTask(list_format, input);
         
         return;
     }
@@ -154,7 +154,7 @@ public class PSSMain
             
             System.out.println("____________________________________");
             
-            int index = pss.getPSSModel().findTask(name, type); // Returns the index if it finds it. 
+            int index = pss.getModel().findTask(name, type); // Returns the index if it finds it.
             
             System.out.println("index: "+ index);
             
@@ -166,7 +166,7 @@ public class PSSMain
                 System.out.println();
             }
             
-            pss.getPSSModel().editTask(list_format, input, index);
+            pss.getModel().editTask(list_format, input, index);
             
             System.out.println("____________________________________");
             
@@ -203,7 +203,7 @@ public class PSSMain
 
             String type = userInput.nextLine();
 
-            pss.getPSSModel().deleteTask(name, type);
+            pss.getModel().deleteTask(name, type);
 
         } while(true);
        

@@ -3,11 +3,11 @@
 
 
 
-public class PSSSchdule implements Schedule
+public class Schdule implements ScheduleInterface
 {
     
     @Override
-    public PSSTask getTask()
+    public Task getTask()
     {
         return null;
     }
