@@ -95,7 +95,7 @@ public class PSSMain
                     break;
                 case 4 : deleteTask(); System.out.println();
                     break;
-                case 5: deleteTask(); System.out.println("Option Not Available Yet. Programming needed!");
+                case 5: storeFile(); System.out.println("Option Not Available Yet. Programming needed!");
                     break;
                 default : System.out.println("Invalid Input.");;
             }
@@ -209,9 +209,11 @@ public class PSSMain
        
     }
     
-    public static void StoreFile()
+    public static void storeFile()
     {
         // Allow user to select on whether store into a new file.
         // OR allow user to store into current file.
+
+        pss.storeToFile("C:\\Users\\James\\Desktop\\CS3560_PSS\\src\\JSON\\test.json");
     }
 }

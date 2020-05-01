@@ -2,14 +2,13 @@
 
 
 
-import java.io.FileNotFoundException; 
-import java.io.PrintWriter; 
-import java.util.LinkedHashMap; 
+import java.io.*;
+import java.util.LinkedHashMap;
 import java.util.Map; 
 import org.json.simple.JSONArray; 
 import org.json.simple.JSONObject; 
 import org.json.simple.parser.JSONParser;
-import java.io.FileReader;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -17,6 +16,8 @@ public class PSS implements PSSInterface
 {
     
     private String fileName;
+
+    private FileWriter outFile;
     
     private JSONArray subjects;
     
@@ -72,7 +73,28 @@ public class PSS implements PSSInterface
     @Override
     public void storeToFile(String fileName)
     {
-        
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("Name", taskList.get(0).getName());
+        jsonObject.put("Type", taskList.get(0).getType());
+        jsonObject.put("Name", taskList.get(0).getName());
+        jsonObject.put("Type", taskList.get(0).getType());
+        jsonObject.put("Name", taskList.get(0).getName());
+        jsonObject.put("Type", taskList.get(0).getType());
+
+        try {
+            outFile = new FileWriter(fileName);
+            outFile.write(jsonObject.toString());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                outFile.flush();
+                outFile.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         
     }
     
