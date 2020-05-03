@@ -1,4 +1,5 @@
 
+import java.util.ArrayList;
 import org.json.simple.JSONObject;
 
 
@@ -13,7 +14,7 @@ public class Task implements TaskInterface
     private String[] list_format; // This array sets the standard of the formatting. Can be useful for other methods.
     
     
-    public Task() // Only for debug. This part allows dummy PSSTask constructor.
+    public Task() // Only for debug. This part allows dummy PSSTask constructor. 
     {
         this.name = "";
         this.type = "";
@@ -81,6 +82,21 @@ public class Task implements TaskInterface
     public String getType()
     {
         return type;
+    }
+    
+    public ArrayList<String> getAllComponents()
+    {
+        ArrayList<String> comp = new ArrayList<String>();
+        
+        comp.add(name);
+        comp.add(type);
+        
+        for(int i = 0; i < time_list.length; i++)
+        {
+            comp.add(Double.toString(time_list[i]));
+        }
+        
+        return comp;
     }
     
     public void viewTask()

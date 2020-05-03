@@ -7,21 +7,21 @@ import org.json.simple.JSONObject;
 
 public class Model implements ModelInterface
 {
-    private PSS pss;
+    private PSS pssController;
     
     private ArrayList<Task> taskList = new ArrayList<>();
     
-    private ArrayList<Schdule> scheduleList = new ArrayList<>();
+    private ArrayList<Schedule> scheduleList = new ArrayList<>();
     
-    private Task task;
+    private Task pssTask;
     
     String[] list_format;
             
     public Model(PSS pssController)
     {
-        this.pss = pssController;
+        this.pssController = pssController;
         
-        task = new Task();
+        pssTask = new Task();
         
     }
     
@@ -31,11 +31,11 @@ public class Model implements ModelInterface
     {
         this.list_format = list_format;
         
-        Task task = new Task(list_format, jsonObject);
-
-        taskList.add(task);
+        Task pssTask = new Task(list_format, jsonObject);
         
-        return task;
+        taskList.add(pssTask);
+        
+        return pssTask;
     }
     
     //All of the user inputs are in a String array type of format that's realtive to the List_format. 

@@ -3,7 +3,7 @@
 
 
 
-public class Schdule implements ScheduleInterface
+public class Schedule implements ScheduleInterface
 {
     
     @Override
