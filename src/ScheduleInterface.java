@@ -4,9 +4,9 @@
 
 
 
-public interface Schedule 
+public interface ScheduleInterface
 {
-    PSSTask getTask();
+    Task getTask();
     void formatTask();
     void printSchedule();
 }
