@@ -21,6 +21,7 @@ public class PSSMain
 {
     public static PSSUser pss_user;
     public static PSSController pss;
+    public static String fileName;
     
     public static String[] list_format
             = {
@@ -37,8 +38,10 @@ public class PSSMain
     public static void main(String[] args) throws Exception
     {
         //PLEASE USE YOUR OWN DIRECTORY TO TEST THE JSON FILE! EVERYONE IS DIFFERENT!!! 
-
-        pss = new PSSController("Set1.json");
+        
+        fileName = "Set1_a.json"; // Directory 
+        
+        pss = new PSSController(fileName);
         
         //pss.printSchedule();
         
@@ -55,7 +58,9 @@ public class PSSMain
         System.out.println("To get started, please enter your name!\n");
         
         System.out.print("Name: _> ");
+        
         name = userInput.nextLine();
+        
         pss_user = new PSSUser(name);
         
         System.out.println("\nHello "+name+"! "+"Thank you for choosing PSS!"+"\n");
@@ -76,7 +81,7 @@ public class PSSMain
                              + "[2] Create Task\n" // Use format from PSSSChedule
                              + "[3] Edit Task\n"   
                              + "[4] Delete Task\n"
-                             + "[5] Store Task to JSON File\n" // allow user to name it
+                             + "[5] File Options\n" // allow user to access the file options to decided on create, store, load a file.
                              + "[0] Quit\n");
             
             System.out.print("Choice: _> ");
@@ -95,7 +100,7 @@ public class PSSMain
                     break;
                 case 4 : deleteTask(); System.out.println();
                     break;
-                case 5: deleteTask(); System.out.println("Option Not Available Yet. Programming needed!");
+                case 5:  FileOption(); System.out.println();
                     break;
                 default : System.out.println("Invalid Input.");;
             }
@@ -209,9 +214,70 @@ public class PSSMain
        
     }
     
-    public static void StoreFile()
+    public static void FileOption()
     {
-        // Allow user to select on whether store into a new file.
-        // OR allow user to store into current file.
+        int input = -1;
+        do
+        {
+            Scanner userInput = new Scanner(System.in);
+
+            System.out.println("----------[File Options]-------------");
+            System.out.println("[0] Return to Menu");
+            System.out.println("[1] Save Current File"); // NOTE! IT WILL MODIFY CURRENT JSON FILE AND will mess up the orignal formatting. However, computer will read it correctly.
+            System.out.println("[2] Save a New File");
+            System.out.println("[3] Load a File"); // Prompt user for the file name and load that file up.
+            
+            System.out.print("Choice: _> ");
+
+            input = userInput.nextInt();
+            
+    
+            
+            switch (input) 
+            {
+                case 0:
+                {
+                    input = 0; 
+                }
+                    break;
+                    
+                case 1:
+                {
+                    pss.storeToFile(fileName);
+                }
+                    break;
+                    
+                case 2:
+                {
+                    
+                    System.out.print("Enter New File Name: _> ");
+                    
+                    fileName = userInput.next();
+                    
+                    System.out.println("File: "+fileName+" has been saved.");
+                    
+                    pss.storeToFile(fileName+".json");
+                }
+                    break;
+                    
+                case 3:  
+                {
+                    System.out.print("Enter File Name: _> ");
+                    
+                    fileName = userInput.next();
+                    
+                    pss = new PSSController(fileName);
+                    
+                    System.out.println("File: "+fileName+" has been loaded.");
+                }
+                    break;
+                    
+                default:
+                    System.out.println("Invalid Input.");
+                    ;
+            }
+            
+            
+        }while(input != 0);
     }
 }
