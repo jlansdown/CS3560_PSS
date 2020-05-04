@@ -107,9 +107,51 @@ public class Task implements TaskInterface
         
         //System.out.println(time_list.length);
         
+        //System.out.println(list_format[4]+": "+ formatTime("StartTime", time_list[4]));
+        
+        
+        //System.out.println("____________________________________");
+        
+        
         for(int i = 0; i < time_list.length; i++)
         {
-            System.out.println(list_format[i + 2] +": "+time_list[i]); // List_Format[name, type, date, startDate, Time, duration, endDate, frequency]
+            System.out.println(list_format[i + 2] +": "+formatTime(list_format[i + 2],time_list[i])); // List_Format[name, type, date, startDate, Time, duration, endDate, frequency]
         }
+    }
+    
+    
+    //Output the a readable time for users.
+    
+    public String formatTime(String type, double time)
+    {
+        String formatted_time = "";
+        
+        if (time >= 0) 
+        {
+            if (type.equals("Date") || type.equals("StartDate") || type.equals("EndDate")) 
+            {
+                time = time / 10000;
+                formatted_time = Double.toString(time);
+            }
+
+            if (type.equals("StartTime")) 
+            {
+                formatted_time = ((int) time % 12 + ":" + "00" + " " + (((int) time >= 12) ? "PM" : "AM"));
+            }
+            if(type.equals("Duration"))
+            {
+                formatted_time = (time + " Hours");
+            }
+            if(type.equals("Frequency"))
+            {
+                formatted_time = (time + " Times");
+            }
+        }
+        else
+        {
+            formatted_time = "Not Available";
+        }
+        
+        return formatted_time;
     }
 }
