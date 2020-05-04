@@ -104,15 +104,7 @@ public class Task implements TaskInterface
         System.out.println("____________________________________");
         System.out.println("Name: " + name);
         System.out.println("Type: " + type);
-        
-        //System.out.println(time_list.length);
-        
-        //System.out.println(list_format[4]+": "+ formatTime("StartTime", time_list[4]));
-        
-        
-        //System.out.println("____________________________________");
-        
-        
+   
         for(int i = 0; i < time_list.length; i++)
         {
             System.out.println(list_format[i + 2] +": "+formatTime(list_format[i + 2],time_list[i])); // List_Format[name, type, date, startDate, Time, duration, endDate, frequency]
@@ -121,7 +113,7 @@ public class Task implements TaskInterface
     
     
     //Output the a readable time for users.
-    
+  
     public String formatTime(String type, double time)
     {
         String formatted_time = "";
@@ -130,13 +122,22 @@ public class Task implements TaskInterface
         {
             if (type.equals("Date") || type.equals("StartDate") || type.equals("EndDate")) 
             {
-                time = time / 10000;
-                formatted_time = Double.toString(time);
+                int date = (int) time / 1;
+
+                int yy = (int) date / 10000;
+
+                int mm = ((int) date / 100) % 10;
+
+                int dd = ((int) date % 100);
+                
+                formatted_time = mm+"/"+dd+"/"+yy;
             }
 
             if (type.equals("StartTime")) 
             {
-                formatted_time = ((int) time % 12 + ":" + "00" + " " + (((int) time >= 12) ? "PM" : "AM"));
+                int hourOfDay = (int) time;
+                double minute = time % 1;
+                formatted_time = ((hourOfDay > 12) ? hourOfDay % 12 : hourOfDay) + ":" + ((int)(minute*60) <= 10 ? ("0" + (int)(minute*60)) : (int)(minute*60)) + " " + ((hourOfDay >= 12) ? "PM" : "AM");
             }
             if(type.equals("Duration"))
             {
