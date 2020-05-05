@@ -1,5 +1,9 @@
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import org.json.simple.JSONObject;
 
 
@@ -74,6 +78,21 @@ public class Task implements TaskInterface
         }
     }
     
+    public double[] getTimeList()
+    {
+        return time_list;
+    }
+    
+    public double getStartTime()
+    {
+        return time_list[4];
+    }
+    
+    public double getDuration()
+    {
+        return time_list[5];
+    }
+    
     public String getName()
     {
         return name;
@@ -112,8 +131,24 @@ public class Task implements TaskInterface
     }
     
     
+    //Useful for determining anti-task and transient tasks. 
+    // Example: this will return : either Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday.
+    
+    public String dayOfWeek(String type, double time) throws ParseException
+    {
+        String mmddyy = formatTime(type, time);
+        
+        SimpleDateFormat format1 = new SimpleDateFormat("mm/dd/yyyy");
+        Date dt1 = format1.parse(mmddyy);
+        
+        DateFormat format2 = new SimpleDateFormat("EEEE");
+        
+        String finalDay = format2.format(dt1);
+        
+        return finalDay;
+    }
+    
     //Output the a readable time for users.
-  
     public String formatTime(String type, double time)
     {
         String formatted_time = "";

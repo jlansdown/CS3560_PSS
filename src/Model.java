@@ -1,6 +1,10 @@
 
+
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
@@ -31,7 +35,7 @@ public class Model implements ModelInterface
     {
         this.list_format = list_format;
         
-        Task pssTask = new Task(list_format, jsonObject);
+        pssTask = new Task(list_format, jsonObject);
         
         taskList.add(pssTask);
         
@@ -42,8 +46,21 @@ public class Model implements ModelInterface
     public void createTask(String[] list_format, String[] input)
     {
         this.list_format = list_format;
+        Task task = new Task(list_format, input);
+        taskList.add(task);
+    }
+    
+    public void createTransientTask(String[] list_format, String[] input) throws ParseException
+    {
+        this.list_format = list_format;
+        Task task = new Task(list_format, input);
         
-        taskList.add(new Task(list_format, input));
+        //add a task if there's no overlap.
+        if (!checkTimeOverLap(task.getName(), task.getType())) 
+        {
+            taskList.add(task);
+        }
+        
     }
     
     public ArrayList<Task> getTaskList()
@@ -59,11 +76,11 @@ public class Model implements ModelInterface
         if(index >= 0)
         {
             taskList.remove(index);
-            System.out.println("Task Name: "+name +" and Type: "+type+" has been deleted!");
+            System.out.println("Task Name: "+ name +" and Type: "+ type +" has been deleted!");
         }
         else
         {
-            System.out.println("Task Name: "+name +" and Type: "+type+" cannot be found!");
+            System.out.println("Task Name: "+ name +" and Type: "+ type +" cannot be found!");
             System.out.println("Please try again!");
         }
     }
@@ -83,10 +100,100 @@ public class Model implements ModelInterface
     }
     
     @Override
-    public boolean checkForOverlap()
+    public boolean checkForOverlap(String name, String type) 
     {
+        //This is just to see if that task exsist or not. 
+        //We'll get the index of that task.
+        
+        int index = findTask(name, type); 
+        
+        //If such task found! 
+        if(index >= 0)
+        {
+            Task task = taskList.get(index); // found task
+            
+            double[] time_list = task.getTimeList();
+            
+            // Check for overlap in terms of weeks of the day
+            try 
+            {
+                // Return true if the current Start Date and Start Date of a same task is the same.
+                //time_list[0] = Date and time_list[1] = StartDate
+                
+                if(time_list[1] > 0 || time_list[0] > 0)
+                {
+                    String searchedDay = task.dayOfWeek("StartDate",time_list[1]);
+                    
+                    double[] this_time_list = this.pssTask.getTimeList();
+                    
+                    String thisTaskDay = this.pssTask.dayOfWeek("StartDate",this_time_list[1]);
+                    
+                    if(thisTaskDay.equals(searchedDay))
+                    {
+                        return true;
+                    }
+                }
+                
+            } 
+            catch (ParseException ex) 
+            {
+                Logger.getLogger(Model.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        
+        else
+        {
+            return false;
+        }
         return false;
     }
+    
+    
+    //Check for time overlap in terms of duration. 
+    public boolean checkTimeOverLap(String name, String type) throws ParseException
+    {
+        int index = findTask(name, type); 
+        
+        if(index >= 0)
+        {
+            Task task = taskList.get(index);
+            
+            double[] time_list = task.getTimeList();
+            double[] this_time_list = this.pssTask.getTimeList();
+            
+            String searchedDay = task.dayOfWeek("StartDate", time_list[1]);
+            String thisTaskDay = this.pssTask.dayOfWeek("Date", this_time_list[0]);
+                    
+            double foundStartTime = task.getStartTime();
+            double foundDuration = task.getDuration();
+            
+            double currentStartTime = this.pssTask.getStartTime();
+            double currentDuration = this.pssTask.getDuration();
+
+            double foundTimeElapsed = foundStartTime + foundDuration;
+            double currentTimeElapsed = currentStartTime + currentDuration;
+            
+            // Account for 1 hour of time to compute the overlaps. 
+            double lowerBound = foundTimeElapsed - 1; // 19.25
+            double upperBound = foundTimeElapsed + 1; // 21.25
+            
+            
+            if (searchedDay.equals(thisTaskDay)) 
+            {
+                if (lowerBound <= currentTimeElapsed && currentTimeElapsed < upperBound) 
+                {
+                    System.out.println("Error! Time Conflict!");
+                    return true;
+                }
+            }
+            
+        }
+        
+        return false;
+    }
+    
+    
     
     // Can be upgraded with a HashMap 
     
@@ -101,63 +208,8 @@ public class Model implements ModelInterface
             {
                 index = i;
             }
-            
         }
         return index;
     }
     
-    
-    //Testing Ideas
-    
-    //-------------------------Initial Ideas
-    //Idea: A list Same tasks Name and Types will be found and will be show to allow users to edit on. 
-    /*
-    public ArrayList<Integer> findTask(String name, String type)
-    {
-        ArrayList<Integer> indexList = new ArrayList<Integer>(); 
-        
-        for(int i = 0 ; i < taskList.size() ; i++)
-        {
-            if(taskList.get(i).getName().equals(name) && taskList.get(i).getType().equals(type))
-            {
-                indexList.add(i);
-            }
-            
-        }
-        return indexList;
-    }*/
-    
-    
-    
-    /* // Initial Thought
-    // Case and type sensitive.
-    // Example: JSONObject jsonObject = pssModel.findTask("CS3560-Tu", "Class");
-    // This will find the appropraite task and return JSON object. 
-    
-    public JSONObject findTask(String name, String type) // O(n) time complexity
-    {
-        JSONArray jsonSubject = pssController.getJSONFileArray();
-        
-        JSONObject tempJSONObject;
-        JSONObject jsonObject = null;
-        
-        Iterator<JSONObject> iterator = jsonSubject.iterator();
-        
-        while(iterator.hasNext())
-        {
-            tempJSONObject = iterator.next();
-            if(name.equals(tempJSONObject.get("Name").toString()) && type.equals(tempJSONObject.get("Type").toString()))
-            {
-                jsonObject = tempJSONObject;
-            }
-        }
-        if(jsonObject == null)
-        {
-            System.out.println("Sorry, cannot find such task!"); // Must throw an exception.
-            
-        }
-        return jsonObject;
-    }*/
-    
-    //sendError();
 }
